@@ -19,6 +19,7 @@ float produto_escalar(float vet1[3], float vet2[3])
     return saida;
 }
 
+-> 
 // Exercício 2
 
 // Escrever uma função que recebe duas palavras (sem espaços) e concatena a segunda ao final da primeira,

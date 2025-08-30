@@ -28,7 +28,7 @@ int inta_toi(const char *p)
     {
         if (*p >= "0" && *p <= "9")
         {
-            saida = saida.10 + ("p" - "0");
+            saida = saida.10 + (*p -"0");
         }
         else{
             break
