@@ -215,21 +215,10 @@ static int cmd_cwd(int argc, char *argv[])
 {
     (void)argc;
     (void)argv;
-    /* TODO: usar getcwd e imprimir diretório atual */
-    fprintf(stderr, "cwd: não implementado.\n");
-    errno = ENOSYS;
-    return 1;
-}
-
-static int cmd_cd(int argc, char *argv[])
-{
-    /* TODO: validar argc e chamar chdir(argv[1]) */
-    (void)argc;
-    (void)argv;
     char path[4096];
-    if (argc != 2)
+    if (argc != 1)
     {
-        perror("argumento inválido: insira um endereço válido");
+        perror("argumento inválido");
         return -1;
     }
     getcwd(path, sizeof(path));
@@ -238,14 +227,46 @@ static int cmd_cd(int argc, char *argv[])
     return 2;
 }
 
+static int cmd_cd(int argc, char *argv[])
+{
+    /* TODO: validar argc e chamar chdir(argv[1]) */
+    (void)argc;
+    (void)argv;
+
+    if (argc != 2)
+    {
+        perror("argumento inválido: insira um endereço válido");
+        return -1;
+    }
+
+    if (chdir(argv[1]) != 0)
+    {
+        perror("Erro ao mudar de diretório");
+        return -1;
+    }
+
+    printf("Diretório alterado para: %s\n", argv[1]);
+    return 0;
+}
+
 static int cmd_mkdir_(int argc, char *argv[])
 {
     /* TODO: usar mkdir(argv[1], modo). Se não fornecer modo, usar 0777 (respeita umask) */
     (void)argc;
     (void)argv;
-    fprintf(stderr, "mkdir: não implementado. uso: mkdir <nome> [modo_oct]\n");
-    errno = ENOSYS;
-    return 2;
+
+    if (argc != 2)
+    {
+        perror("argumento inválido: insira um nome de endereço");
+        return -1;
+    }
+
+    if(mkdir(argv[1],0777)!=0){
+        perror("Erro ao criar diretório");
+        return -1;
+    }
+
+    printf("diretório criado com sucesso\n");
 }
 
 static int cmd_rmdir_(int argc, char *argv[])
