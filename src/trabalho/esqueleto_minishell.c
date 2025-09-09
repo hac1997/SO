@@ -261,7 +261,8 @@ static int cmd_mkdir_(int argc, char *argv[])
         return -1;
     }
 
-    if(mkdir(argv[1],0777)!=0){
+    if (mkdir(argv[1], 0777) != 0)
+    {
         perror("Erro ao criar diretório");
         return -1;
     }
@@ -274,29 +275,59 @@ static int cmd_rmdir_(int argc, char *argv[])
     /* TODO: usar rmdir(argv[1]) */
     (void)argc;
     (void)argv;
-    fprintf(stderr, "rmdir: não implementado. uso: rmdir <nome>\n");
-    errno = ENOSYS;
+    if (argc < 2)
+    {
+        perror("digite um diretório válido");
+    }
+
+    for (int c = 1; c < argc; c++)
+    {
+        rmdir(argv[c]);
+    }
+    if (argc == 2)
+    {
+        printf("diretório removido");
+    }
+    if (argc > 2)
+    {
+        printf("diretórios removidos");
+    }
+
     return 2;
 }
 
-static int cmd_stat_(int argc, char *argv[])
-{
-    /* TODO: usar lstat(argv[1], &st) e imprimir tipo, modo, tamanho etc. */
-    (void)argc;
-    (void)argv;
-    fprintf(stderr, "stat: não implementado. uso: stat <alvo>\n");
-    errno = ENOSYS;
-    return 2;
-}
+// static int cmd_stat_(int argc, char *argv[])
+// {
+//     /* TODO: usar lstat(argv[1], &st) e imprimir tipo, modo, tamanho etc. */
+//     (void)argc;
+//     (void)argv;
+//     if(argc >2){
+//         perror("número de parâmetros maior errado");
+//     }
+//     stat(argv[1],(stat) argv[2]);
+//     printf("/n");
+//     return 2;
+// }
 
 static int cmd_ls(int argc, char *argv[])
 {
     /* TODO: usar opendir("."), readdir(), imprimir nomes e closedir() */
     (void)argc;
     (void)argv;
-    fprintf(stderr, "ls: não implementado.\n");
-    errno = ENOSYS;
-    return 1;
+    DIR *dir;
+    dir = opendir(".");
+    if (dir == NULL)
+    {
+        perror("não foi possível localizar o seu repositório");
+        return -1;
+    }
+    struct dirent *entry;
+    while ((entry = readdir(dir)) != NULL)
+    {
+        printf("%s \n", entry);
+    }
+    closedir(dir);
+    return 2;
 }
 
 /* =============================================================
